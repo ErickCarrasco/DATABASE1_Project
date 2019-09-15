@@ -379,35 +379,117 @@ public class Menu extends javax.swing.JFrame {
     private void jb_acceptRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_acceptRecordMouseClicked
         // TODO add your handling code here:
         try{
+            boolean stateEmail = rb_withEmail.isSelected();
+            System.out.println(stateEmail);
             String sql2 = "";
             int idg = 0;
-            sql2 = "SELECT ID_Cliente FROM CLIENTES WHERE ID_CLiente=" + tf_idClient.getText();
+            sql2 = "SELECT ID_CLIENTE FROM CLIENTES WHERE ID_CLIENTE=" + tf_idClient.getText();
+            //System.out.println(sql2);
             st = cn.createStatement();
             rs = st.executeQuery(sql2);
-            if(sql2!=""){
+            int value=0;
+            while(rs.next()){
+                value = rs.getInt(1);
+            }
+            System.out.println(value);
+            if(value==Integer.parseInt(tf_idClient.getText())){
                 JOptionPane.showMessageDialog(jd_crearUserOnline, "Error, ID existente");
             }else{
-                if(isValid(tf_emailClient.getText())){
-                    String extractID= tf_idClient.getText();
-                    PreparedStatement pps = cn.prepareStatement("INSERT INTO CLIENTES(ID_CLIENTE, PN_CLIENTE, SN_CLIENTE, PA_CLIENTE,"
-                            + "SA_CLIENTE, DIRECCION_CLIENTE, CORREO_CLIENTE) VALUES(?,?,?,?,?,?,?)");
-                    pps.setInt(1,Integer.parseInt(extractID));
-                    pps.setString(2, tf_firstNameClient.getText());
-                    pps.setString(3, tf_middleNameClient.getText());
-                    pps.setString(4, tf_lastName.getText());
-                    pps.setString(5, tf_secondLastNameClient.getText());
-                    pps.setString(6, tf_addressClient.getText());
-                    pps.setString(7, tf_emailClient.getText());
-                    pps.executeUpdate();
-                    JOptionPane.showMessageDialog(jd_crearUserOnline, "Creating data.. Please wait.");
-                    PreparedStatement pps2 = cn.prepareStatement("INSERT INTO CLIENTE_ONLINE(id_cliente_cliente_online, password_cliente_online)"
-                            + " VALUES(?,?)");
+                //If email will be used
+                if(stateEmail){
+                    if (isValid(tf_emailClient.getText())) {
+                        
+                        //Validate if email is already on the database
+                        String sqlQueryEmail = "";
+                        sqlQueryEmail ="SELECT CORREO_CLIENTE FROM CLIENTES WHERE CORREO_CLIENTE=" + tf_idClient.getText();
+                        Statement st2 = cn.createStatement();
+                        ResultSet rs2 = st2.executeQuery(sqlQueryEmail);
+                        String usedEmail="";
+                        while(rs2.next()){
+                            usedEmail = rs2.getString(7);
+                        }
+                        if(usedEmail.equals(tf_addressClient.getText())){
+                            JOptionPane.showMessageDialog(jd_crearUserOnline, "Correo en uso");
+                        }else{
+                            if(pf_passClient.getText().equals(pf_confirmPass.getText())){
+                                String extractID = tf_idClient.getText();
+                                PreparedStatement pps = cn.prepareStatement("INSERT INTO CLIENTES(ID_CLIENTE, PN_CLIENTE, SN_CLIENTE, PA_CLIENTE,"
+                                        + "SA_CLIENTE, DIRECCION_CLIENTE, CORREO_CLIENTE) VALUES(?,?,?,?,?,?,?)");
+                                pps.setInt(1, Integer.parseInt(extractID));
+                                pps.setString(2, tf_firstNameClient.getText());
+                                pps.setString(3, tf_middleNameClient.getText());
+                                pps.setString(4, tf_lastName.getText());
+                                pps.setString(5, tf_secondLastNameClient.getText());
+                                pps.setString(6, tf_addressClient.getText());
+                                pps.setString(7, tf_emailClient.getText());
+                                pps.executeUpdate();
+                                JOptionPane.showMessageDialog(jd_crearUserOnline, "Creating data.. Please wait.");
+                                PreparedStatement pps2 = cn.prepareStatement("INSERT INTO CLIENTE_ONLINE(id_cliente_cliente_online, password_cliente_online)"
+                                        + " VALUES(?,?)");
+                                pps2.setInt(1, Integer.parseInt(extractID));
+                                pps2.setString(2, pf_confirmPass.getText());
+                                pps2.executeUpdate();
+                                JOptionPane.showMessageDialog(jd_crearUserOnline, "Exitosamente guardado");
+                                
+                                //Delete field Data
+                                tf_addressClient.setText("");
+                                tf_idClient.setText("");
+                                tf_firstNameClient.setText("");
+                                tf_middleNameClient.setText("");
+                                tf_lastName.setText("");
+                                tf_secondLastNameClient.setText("");
+                                tf_emailClient.setText("");
+                                pf_confirmPass.setText("");
+                                pf_passClient.setText("");
+                                jd_crearUserOnline.dispose();
+                                jd_crearUserOnline.setVisible(false);
+                                
+                            }else{
+                                JOptionPane.showMessageDialog(jd_crearUserOnline, "Revise la password");
+                            }
+                            
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(jd_crearUserOnline, "Email no valido");
+                    }
                 }else{
-                    JOptionPane.showMessageDialog(jd_crearUserOnline, "Email no valido");
-                }
+                    if(pf_passClient.getText().equals(pf_confirmPass)){
+                                String extractID = tf_idClient.getText();
+                                PreparedStatement pps = cn.prepareStatement("INSERT INTO CLIENTES(ID_CLIENTE, PN_CLIENTE, SN_CLIENTE, PA_CLIENTE,"
+                                        + "SA_CLIENTE, DIRECCION_CLIENTE, CORREO_CLIENTE) VALUES(?,?,?,?,?,?,?)");
+                                pps.setInt(1, Integer.parseInt(extractID));
+                                pps.setString(2, tf_firstNameClient.getText());
+                                pps.setString(3, tf_middleNameClient.getText());
+                                pps.setString(4, tf_lastName.getText());
+                                pps.setString(5, tf_secondLastNameClient.getText());
+                                pps.setString(6, tf_addressClient.getText());
+                                pps.setString(7, tf_emailClient.getText());
+                                pps.executeUpdate();
+                                JOptionPane.showMessageDialog(jd_crearUserOnline, "Creating data.. Please wait.");
+                                PreparedStatement pps2 = cn.prepareStatement("INSERT INTO CLIENTE_ONLINE(id_cliente_cliente_online, password_cliente_online)"
+                                        + " VALUES(?,?)");
+                                pps2.setInt(1, Integer.parseInt(extractID));
+                                pps2.setString(2, pf_confirmPass.getText());
+                                pps2.executeUpdate();
+                                
+                                //Delete field Data
+                                tf_addressClient.setText("");
+                                tf_idClient.setText("");
+                                tf_firstNameClient.setText("");
+                                tf_middleNameClient.setText("");
+                                tf_lastName.setText("");
+                                tf_secondLastNameClient.setText("");
+                                tf_emailClient.setText("");
+                                pf_confirmPass.setText("");
+                                pf_passClient.setText("");
+                                jd_crearUserOnline.dispose();
+                                jd_crearUserOnline.setVisible(false);
+                    }
+                }//In case the email is not used
             }
         }catch(Exception e){
             JOptionPane.showMessageDialog(jd_crearUserOnline, "Error en el registro de usuario");
+            e.printStackTrace();
         }
     }//GEN-LAST:event_jb_acceptRecordMouseClicked
 
