@@ -39,6 +39,8 @@ import java.util.Arrays;
 import java.util.Formatter;
 import javax.swing.DefaultComboBoxModel;
 import java.util.Date;
+import java.util.regex.Matcher; 
+import java.util.regex.Pattern; 
 
 /**
  *
@@ -46,7 +48,7 @@ import java.util.Date;
  */
 public class Menu extends javax.swing.JFrame {
     Conexion con = new Conexion();
-    static Statement sr;
+    static Statement st;
     static ResultSet rs;
     
     int cantFilas;
@@ -106,6 +108,8 @@ public class Menu extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         pf_confirmPass = new javax.swing.JPasswordField();
         jb_acceptRecord = new javax.swing.JButton();
+        rb_noEmail = new javax.swing.JRadioButton();
+        rb_withEmail = new javax.swing.JRadioButton();
         jd_registradora = new javax.swing.JDialog();
         jd_Administer = new javax.swing.JDialog();
         jf_onlineShop = new javax.swing.JFrame();
@@ -147,6 +151,20 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        rb_noEmail.setText("Sin correo");
+        rb_noEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rb_noEmailMouseClicked(evt);
+            }
+        });
+
+        rb_withEmail.setText("Con correo");
+        rb_withEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rb_withEmailMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jd_crearUserOnlineLayout = new javax.swing.GroupLayout(jd_crearUserOnline.getContentPane());
         jd_crearUserOnline.getContentPane().setLayout(jd_crearUserOnlineLayout);
         jd_crearUserOnlineLayout.setHorizontalGroup(
@@ -171,14 +189,13 @@ public class Menu extends javax.swing.JFrame {
                                                 .addComponent(tf_idClient, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                                                 .addComponent(tf_firstNameClient)))))
                                 .addGroup(jd_crearUserOnlineLayout.createSequentialGroup()
-                                    .addGroup(jd_crearUserOnlineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_crearUserOnlineLayout.createSequentialGroup()
-                                            .addComponent(jLabel7)
-                                            .addGap(18, 18, 18))
+                                    .addGroup(jd_crearUserOnlineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(jd_crearUserOnlineLayout.createSequentialGroup()
                                             .addComponent(jLabel8)
-                                            .addGap(30, 30, 30)))
-                                    .addGap(4, 4, 4)
+                                            .addGap(34, 34, 34))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jd_crearUserOnlineLayout.createSequentialGroup()
+                                            .addComponent(jLabel7)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                     .addGroup(jd_crearUserOnlineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(tf_lastName, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                                         .addComponent(tf_middleNameClient))))
@@ -198,7 +215,12 @@ public class Menu extends javax.swing.JFrame {
                                     .addComponent(pf_passClient)))))
                     .addGroup(jd_crearUserOnlineLayout.createSequentialGroup()
                         .addGap(144, 144, 144)
-                        .addComponent(jb_acceptRecord)))
+                        .addComponent(jb_acceptRecord))
+                    .addGroup(jd_crearUserOnlineLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(rb_noEmail)
+                        .addGap(48, 48, 48)
+                        .addComponent(rb_withEmail)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         jd_crearUserOnlineLayout.setVerticalGroup(
@@ -242,7 +264,11 @@ public class Menu extends javax.swing.JFrame {
                 .addGroup(jd_crearUserOnlineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(pf_confirmPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(jd_crearUserOnlineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rb_noEmail)
+                    .addComponent(rb_withEmail))
+                .addGap(50, 50, 50)
                 .addComponent(jb_acceptRecord)
                 .addContainerGap())
         );
@@ -347,6 +373,7 @@ public class Menu extends javax.swing.JFrame {
         jd_crearUserOnline.pack();
         jd_crearUserOnline.setLocationRelativeTo(this);
         jd_crearUserOnline.setVisible(true);
+        rb_noEmail.setSelected(true);
     }//GEN-LAST:event_jb_registerMouseClicked
 
     private void jb_acceptRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_acceptRecordMouseClicked
@@ -355,16 +382,60 @@ public class Menu extends javax.swing.JFrame {
             String sql2 = "";
             int idg = 0;
             sql2 = "SELECT ID_Cliente FROM CLIENTES WHERE ID_CLiente=" + tf_idClient.getText();
+            st = cn.createStatement();
+            rs = st.executeQuery(sql2);
             if(sql2!=""){
                 JOptionPane.showMessageDialog(jd_crearUserOnline, "Error, ID existente");
             }else{
-                
+                if(isValid(tf_emailClient.getText())){
+                    String extractID= tf_idClient.getText();
+                    PreparedStatement pps = cn.prepareStatement("INSERT INTO CLIENTES(ID_CLIENTE, PN_CLIENTE, SN_CLIENTE, PA_CLIENTE,"
+                            + "SA_CLIENTE, DIRECCION_CLIENTE, CORREO_CLIENTE) VALUES(?,?,?,?,?,?,?)");
+                    pps.setInt(1,Integer.parseInt(extractID));
+                    pps.setString(2, tf_firstNameClient.getText());
+                    pps.setString(3, tf_middleNameClient.getText());
+                    pps.setString(4, tf_lastName.getText());
+                    pps.setString(5, tf_secondLastNameClient.getText());
+                    pps.setString(6, tf_addressClient.getText());
+                    pps.setString(7, tf_emailClient.getText());
+                    pps.executeUpdate();
+                    JOptionPane.showMessageDialog(jd_crearUserOnline, "Creating data.. Please wait.");
+                    PreparedStatement pps2 = cn.prepareStatement("INSERT INTO CLIENTE_ONLINE(id_cliente_cliente_online, password_cliente_online)"
+                            + " VALUES(?,?)");
+                }else{
+                    JOptionPane.showMessageDialog(jd_crearUserOnline, "Email no valido");
+                }
             }
         }catch(Exception e){
             JOptionPane.showMessageDialog(jd_crearUserOnline, "Error en el registro de usuario");
         }
     }//GEN-LAST:event_jb_acceptRecordMouseClicked
 
+    private void rb_noEmailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rb_noEmailMouseClicked
+        // TODO add your handling code here:
+        rb_withEmail.setSelected(false);
+        rb_noEmail.setSelected(true);
+    }//GEN-LAST:event_rb_noEmailMouseClicked
+
+    private void rb_withEmailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rb_withEmailMouseClicked
+        // TODO add your handling code here:
+        rb_withEmail.setSelected(true);
+        rb_noEmail.setSelected(false);
+    }//GEN-LAST:event_rb_withEmailMouseClicked
+
+    public static boolean isValid(String email) 
+    { 
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
+                            "[a-zA-Z0-9_+&*-]+)*@" + 
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
+                            "A-Z]{2,7}$"; 
+                              
+        Pattern pat = Pattern.compile(emailRegex); 
+        if (email == null) 
+            return false; 
+        return pat.matcher(email).matches(); 
+    } 
+    
     public void Connect(){
         try {
             
@@ -435,6 +506,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPasswordField pf_confirmPass;
     private javax.swing.JPasswordField pf_passClient;
     private javax.swing.JPasswordField pf_password_user;
+    private javax.swing.JRadioButton rb_noEmail;
+    private javax.swing.JRadioButton rb_withEmail;
     private javax.swing.JTextField tf_addressClient;
     private javax.swing.JTextField tf_emailClient;
     private javax.swing.JTextField tf_firstNameClient;
