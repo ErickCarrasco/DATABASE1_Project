@@ -128,6 +128,12 @@ public class Menu extends javax.swing.JFrame {
         jb_delete = new javax.swing.JButton();
         jb_exit_clients = new javax.swing.JButton();
         jf_Inventario = new javax.swing.JFrame();
+        jLabel16 = new javax.swing.JLabel();
+        tf_tiendaID = new javax.swing.JTextField();
+        jb_searchID_store = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        Table_Inventory_store = new javax.swing.JTable();
+        jb_confirmExit_Inventory = new javax.swing.JButton();
         jf_compras_cliente = new javax.swing.JFrame();
         jTF_user = new javax.swing.JTextField();
         pf_password_user = new javax.swing.JPasswordField();
@@ -311,7 +317,7 @@ public class Menu extends javax.swing.JFrame {
 
         jb_InventarioTienda.setText("Inventario");
 
-        jb_comprasxclient.setText("Compras Realizadas");
+        jb_comprasxclient.setText("Transacciones Realizadas");
 
         jb_exit.setText("Salir");
 
@@ -329,7 +335,7 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(jLabel14))
                 .addGap(42, 42, 42)
                 .addComponent(jb_comprasxclient)
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_AdministerLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jb_exit)
@@ -436,15 +442,56 @@ public class Menu extends javax.swing.JFrame {
                         .addGap(36, 36, 36))))
         );
 
+        jLabel16.setText("Tienda ID");
+
+        jb_searchID_store.setText("Search");
+
+        Table_Inventory_store.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Producto", "Codigo", "Cantidad", "Precio per Producto"
+            }
+        ));
+        jScrollPane2.setViewportView(Table_Inventory_store);
+
+        jb_confirmExit_Inventory.setText("Exit");
+
         javax.swing.GroupLayout jf_InventarioLayout = new javax.swing.GroupLayout(jf_Inventario.getContentPane());
         jf_Inventario.getContentPane().setLayout(jf_InventarioLayout);
         jf_InventarioLayout.setHorizontalGroup(
             jf_InventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jf_InventarioLayout.createSequentialGroup()
+                .addGroup(jf_InventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jf_InventarioLayout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(jf_InventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jf_InventarioLayout.createSequentialGroup()
+                                .addComponent(tf_tiendaID, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(78, 78, 78)
+                                .addComponent(jb_searchID_store))
+                            .addComponent(jLabel16)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 606, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jf_InventarioLayout.createSequentialGroup()
+                        .addGap(302, 302, 302)
+                        .addComponent(jb_confirmExit_Inventory)))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         jf_InventarioLayout.setVerticalGroup(
             jf_InventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jf_InventarioLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel16)
+                .addGap(18, 18, 18)
+                .addGroup(jf_InventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tf_tiendaID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jb_searchID_store))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addComponent(jb_confirmExit_Inventory)
+                .addGap(28, 28, 28))
         );
 
         javax.swing.GroupLayout jf_compras_clienteLayout = new javax.swing.GroupLayout(jf_compras_cliente.getContentPane());
@@ -740,9 +787,12 @@ public class Menu extends javax.swing.JFrame {
             int xValue = Table_Clients.getSelectedRow();
             String codex = Table_Clients.getValueAt(xValue, 0).toString();
             System.out.println(codex);
-            String sql2 = "DELETE FROM CLIENTES WHERE ID_CLIENTE=" + codex;
-            st = cn.createStatement();
-            rs = st.executeQuery(sql2);
+            //String sql2 = "DELETE FROM CLIENTES WHERE ID_CLIENTE=" + codex;
+            //st = cn.createStatement();
+            //rs = st.executeQuery(sql2);
+            PreparedStatement pstmnt;
+            pstmnt = cn.prepareStatement("DELETE FROM CLIENTES WHERE ID_CLIENTE=" + codex);
+            pstmnt.executeUpdate();
         } catch (Exception e) {
 
         }
@@ -827,6 +877,7 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Table_Clients;
+    private javax.swing.JTable Table_Inventory_store;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -834,6 +885,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -843,17 +895,20 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTF_user;
     private javax.swing.JButton jb_InventarioTienda;
     private javax.swing.JButton jb_acceptRecord;
     private javax.swing.JButton jb_clientes_admin;
     private javax.swing.JButton jb_comprasxclient;
+    private javax.swing.JButton jb_confirmExit_Inventory;
     private javax.swing.JButton jb_delete;
     private javax.swing.JButton jb_exit;
     private javax.swing.JButton jb_exit_clients;
     private javax.swing.JButton jb_login;
     private javax.swing.JButton jb_register;
     private javax.swing.JButton jb_searchID;
+    private javax.swing.JButton jb_searchID_store;
     private javax.swing.JDialog jd_Administer;
     private javax.swing.JDialog jd_crearUserOnline;
     private javax.swing.JDialog jd_registradora;
@@ -874,5 +929,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JTextField tf_middleNameClient;
     private javax.swing.JTextField tf_search_id;
     private javax.swing.JTextField tf_secondLastNameClient;
+    private javax.swing.JTextField tf_tiendaID;
     // End of variables declaration//GEN-END:variables
 }
