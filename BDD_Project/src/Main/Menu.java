@@ -58,6 +58,7 @@ public class Menu extends javax.swing.JFrame {
     Connection cn = (Connection) con.conexionbd();
     
     //Variables For User Creation and access
+    //Prototypes
     int contadorUsers=0;
     int locationUserRecord=0;
     int searcher=0;
@@ -316,6 +317,11 @@ public class Menu extends javax.swing.JFrame {
         });
 
         jb_InventarioTienda.setText("Inventario");
+        jb_InventarioTienda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_InventarioTiendaMouseClicked(evt);
+            }
+        });
 
         jb_comprasxclient.setText("Transacciones Realizadas");
 
@@ -445,6 +451,11 @@ public class Menu extends javax.swing.JFrame {
         jLabel16.setText("Tienda ID");
 
         jb_searchID_store.setText("Search");
+        jb_searchID_store.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_searchID_storeMouseClicked(evt);
+            }
+        });
 
         Table_Inventory_store.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -457,6 +468,11 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane2.setViewportView(Table_Inventory_store);
 
         jb_confirmExit_Inventory.setText("Exit");
+        jb_confirmExit_Inventory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_confirmExit_InventoryMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jf_InventarioLayout = new javax.swing.GroupLayout(jf_Inventario.getContentPane());
         jf_Inventario.getContentPane().setLayout(jf_InventarioLayout);
@@ -582,7 +598,9 @@ public class Menu extends javax.swing.JFrame {
 
     private void jb_acceptRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_acceptRecordMouseClicked
         // TODO add your handling code here:
+        //Adds new Client
         try{
+            //Will check if the current id is new or is already on the database
             boolean stateEmail = rb_withEmail.isSelected();
             System.out.println(stateEmail);
             String sql2 = "";
@@ -596,12 +614,12 @@ public class Menu extends javax.swing.JFrame {
                 value = rs.getInt(1);
             }
             System.out.println(value);
-            if(value==Integer.parseInt(tf_idClient.getText())){
+            if(value==Integer.parseInt(tf_idClient.getText())){//In case it already exists, a message is displayed
                 JOptionPane.showMessageDialog(jd_crearUserOnline, "Error, ID existente");
             }else{
                 //If email will be used
                 if(stateEmail){
-                    if (isValid(tf_emailClient.getText())) {
+                    if (isValid(tf_emailClient.getText())) {//Checks if current email is an actual email
                         
                         //Validate if email is already on the database
                         String sqlQueryEmail = "";
@@ -612,11 +630,15 @@ public class Menu extends javax.swing.JFrame {
                         while(rs2.next()){
                             usedEmail = rs2.getString(7);
                         }
-                        if(usedEmail.equals(tf_addressClient.getText())){
+                        if(usedEmail.equals(tf_addressClient.getText())){//Emails must be unique too
                             JOptionPane.showMessageDialog(jd_crearUserOnline, "Correo en uso");
                         }else{
                             if(pf_passClient.getText().equals(pf_confirmPass.getText())){
+                                //If all data is accepted, proceed to insert into the table
+                                
                                 String extractID = tf_idClient.getText();
+                                //PreparedStatement allows the insertion and update of new data
+                                //in the database
                                 PreparedStatement pps = cn.prepareStatement("INSERT INTO CLIENTES(ID_CLIENTE, PN_CLIENTE, SN_CLIENTE, PA_CLIENTE,"
                                         + "SA_CLIENTE, DIRECCION_CLIENTE, CORREO_CLIENTE) VALUES(?,?,?,?,?,?,?)");
                                 pps.setInt(1, Integer.parseInt(extractID));
@@ -658,7 +680,10 @@ public class Menu extends javax.swing.JFrame {
                     }
                 }else{
                     if(pf_passClient.getText().equals(pf_confirmPass)){
+                                //If all data is accepted, proceed to insert into the table
                                 String extractID = tf_idClient.getText();
+                                //PreparedStatement allows the insertion and update of new data
+                                //in the database
                                 PreparedStatement pps = cn.prepareStatement("INSERT INTO CLIENTES(ID_CLIENTE, PN_CLIENTE, SN_CLIENTE, PA_CLIENTE,"
                                         + "SA_CLIENTE, DIRECCION_CLIENTE, CORREO_CLIENTE) VALUES(?,?,?,?,?,?,?)");
                                 pps.setInt(1, Integer.parseInt(extractID));
@@ -711,6 +736,8 @@ public class Menu extends javax.swing.JFrame {
 
     private void jb_loginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_loginMouseClicked
         // TODO add your handling code here:
+        
+        //Checks if the user is an admin
         String username="";
         String password="";
         username=jTF_user.getText();
@@ -725,14 +752,14 @@ public class Menu extends javax.swing.JFrame {
             jd_Administer.setVisible(true);
             jTF_user.setText("");
             pf_password_user.setText("");
-        }else if(username!="admin"){
-            System.out.println("Something");
+        }else if(username!="Test"){
+            //In case it is not an admin, proceed to allocate the user data
         }
     }//GEN-LAST:event_jb_loginMouseClicked
 
     private void jb_searchIDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_searchIDMouseClicked
         // TODO add your handling code here:
-        
+        //User seeker
         try{
             String locator = "";
             locator = tf_search_id.getText();
@@ -745,6 +772,7 @@ public class Menu extends javax.swing.JFrame {
             while (rs.next()) {
                 value = rs.getInt(1);
             }
+            //Gets the current id that the admin wants to find
             System.out.println(value);
             if(value==convertedLocator){
                 String nameUser="";
@@ -817,6 +845,107 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jb_exit_clientsMouseClicked
 
+    private void jb_searchID_storeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_searchID_storeMouseClicked
+        // TODO add your handling code here:
+        try {
+            String codeStore="";
+            codeStore=tf_tiendaID.getText();
+            String sql2 = "";
+            sql2 = "SELECT id_tienda FROM TIENDAS WHERE id_tienda="+codeStore;
+            int storeIdCheck=0;
+            st = cn.createStatement();
+            rs = st.executeQuery(sql2);
+            while(rs.next()){
+                storeIdCheck= rs.getInt(1);
+            }
+            System.out.println(storeIdCheck);
+            System.out.println(codeStore);
+            if(Integer.parseInt(codeStore)==storeIdCheck){
+                //DefaultTableModel model2 = (DefaultTableModel) Table_Inventory_store.getModel();
+                //model2.setRowCount(0);
+
+                
+                //Start Searching for the items on the store
+                ArrayList <String> productsFound = new ArrayList<String>();
+                String sqlItems="";
+                sqlItems = "SELECT * FROM tiendaxproducto WHERE id_tienda_TP="+codeStore;
+                Statement stItems = cn.createStatement();
+                ResultSet rs2 = stItems.executeQuery(sqlItems);
+                while(rs2.next()){
+                    int getterData = rs2.getInt(2);
+                    productsFound.add(Integer.toString(getterData));
+                }
+                /*for (int i = 0; i < productsFound.size(); i++) {
+                    System.out.println(productsFound.get(i));
+                }*/
+                
+                ArrayList <String> quantityPerProduct = new ArrayList<String>();
+                //Data 2
+                String sqlItemsQuantity="";
+                sqlItemsQuantity = "SELECT * FROM tiendaxproducto WHERE id_tienda_TP="+codeStore;
+                Statement stItems2 = cn.createStatement();
+                ResultSet rs21 = stItems2.executeQuery(sqlItemsQuantity);
+                
+                while(rs21.next()){
+                    int getQuantity = rs21.getInt(4);
+                    quantityPerProduct.add(Integer.toString(getQuantity));
+                }
+                
+                //DATA 3
+                String sqlItemsPrice="";
+                sqlItemsPrice = "SELECT * FROM tiendaxproducto WHERE id_tienda_TP="+codeStore;
+                Statement stItemsPrices = cn.createStatement();
+                ResultSet rs22 = stItemsPrices.executeQuery(sqlItemsPrice);
+                ArrayList <String> pricePerProduct = new ArrayList<String>();
+                while(rs22.next()){
+                    int getPrice = rs22.getInt(3);
+                    pricePerProduct.add(Integer.toString(getPrice));
+                }
+                DefaultTableModel model = (DefaultTableModel) Table_Inventory_store.getModel();
+                for(int i=0; i<productsFound.size();i++){
+                    String productName="";
+                    String sqlGetItemName="";
+                    sqlGetItemName="Select * FROM PRODUCTOS WHERE codigo_producto="+productsFound.get(i);
+                    Statement stItemName= cn.createStatement();
+                    ResultSet rs3= stItemName.executeQuery(sqlGetItemName);
+                    while(rs3.next()){
+                        productName=rs3.getString(1);
+                    }
+                    
+                    model.addRow(new Object[]{productName,productsFound.get(i), quantityPerProduct.get(i),
+                                                pricePerProduct.get(i)});
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(jf_Inventario, "La tienda no se encontro o no existe");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jb_searchID_storeMouseClicked
+
+    private void jb_InventarioTiendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_InventarioTiendaMouseClicked
+        // TODO add your handling code here:
+        jd_Administer.dispose();
+        jf_Inventario.setModalExclusionType(Dialog.ModalExclusionType.NO_EXCLUDE);
+        jf_Inventario.pack();
+        jf_Inventario.setLocationRelativeTo(this);
+        jf_Inventario.setVisible(true);
+    }//GEN-LAST:event_jb_InventarioTiendaMouseClicked
+
+    private void jb_confirmExit_InventoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_confirmExit_InventoryMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) Table_Inventory_store.getModel();
+        model.setRowCount(0);
+        tf_tiendaID.setText("");
+        jf_Inventario.dispose();
+        jd_Administer.setModal(true);
+        jd_Administer.pack();
+        jd_Administer.setLocationRelativeTo(this);
+        jd_Administer.setVisible(true);
+    }//GEN-LAST:event_jb_confirmExit_InventoryMouseClicked
+
     public static boolean isValid(String email) 
     { 
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
@@ -831,6 +960,7 @@ public class Menu extends javax.swing.JFrame {
     } 
     
     public void Connect(){
+        //Connection with the Database 
         try {
             
             Statement st = cn.createStatement();
