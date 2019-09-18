@@ -41,6 +41,7 @@ import javax.swing.DefaultComboBoxModel;
 import java.util.Date;
 import java.util.regex.Matcher; 
 import java.util.regex.Pattern; 
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -112,7 +113,22 @@ public class Menu extends javax.swing.JFrame {
         rb_withEmail = new javax.swing.JRadioButton();
         jd_registradora = new javax.swing.JDialog();
         jd_Administer = new javax.swing.JDialog();
+        jLabel14 = new javax.swing.JLabel();
+        jb_clientes_admin = new javax.swing.JButton();
+        jb_InventarioTienda = new javax.swing.JButton();
+        jb_comprasxclient = new javax.swing.JButton();
+        jb_exit = new javax.swing.JButton();
         jf_onlineShop = new javax.swing.JFrame();
+        jf_clientes = new javax.swing.JFrame();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Table_Clients = new javax.swing.JTable();
+        tf_search_id = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jb_searchID = new javax.swing.JButton();
+        jb_delete = new javax.swing.JButton();
+        jb_exit_clients = new javax.swing.JButton();
+        jf_Inventario = new javax.swing.JFrame();
+        jf_compras_cliente = new javax.swing.JFrame();
         jTF_user = new javax.swing.JTextField();
         pf_password_user = new javax.swing.JPasswordField();
         jb_login = new javax.swing.JButton();
@@ -284,15 +300,54 @@ public class Menu extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
+        jLabel14.setText("Admin");
+
+        jb_clientes_admin.setText("Clientes");
+        jb_clientes_admin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_clientes_adminMouseClicked(evt);
+            }
+        });
+
+        jb_InventarioTienda.setText("Inventario");
+
+        jb_comprasxclient.setText("Compras Realizadas");
+
+        jb_exit.setText("Salir");
+
         javax.swing.GroupLayout jd_AdministerLayout = new javax.swing.GroupLayout(jd_Administer.getContentPane());
         jd_Administer.getContentPane().setLayout(jd_AdministerLayout);
         jd_AdministerLayout.setHorizontalGroup(
             jd_AdministerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jd_AdministerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jd_AdministerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jd_AdministerLayout.createSequentialGroup()
+                        .addComponent(jb_clientes_admin)
+                        .addGap(32, 32, 32)
+                        .addComponent(jb_InventarioTienda))
+                    .addComponent(jLabel14))
+                .addGap(42, 42, 42)
+                .addComponent(jb_comprasxclient)
+                .addContainerGap(164, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_AdministerLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jb_exit)
+                .addGap(25, 25, 25))
         );
         jd_AdministerLayout.setVerticalGroup(
             jd_AdministerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jd_AdministerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addGap(51, 51, 51)
+                .addGroup(jd_AdministerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jb_clientes_admin)
+                    .addComponent(jb_InventarioTienda)
+                    .addComponent(jb_comprasxclient))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
+                .addComponent(jb_exit)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jf_onlineShopLayout = new javax.swing.GroupLayout(jf_onlineShop.getContentPane());
@@ -306,9 +361,111 @@ public class Menu extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
+        Table_Clients.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Codigo", "Nombre"
+            }
+        ));
+        jScrollPane1.setViewportView(Table_Clients);
+
+        jLabel15.setText("Buscar");
+
+        jb_searchID.setText("Search");
+        jb_searchID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_searchIDMouseClicked(evt);
+            }
+        });
+
+        jb_delete.setText("Delete");
+        jb_delete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_deleteMouseClicked(evt);
+            }
+        });
+
+        jb_exit_clients.setText("Exit");
+        jb_exit_clients.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_exit_clientsMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jf_clientesLayout = new javax.swing.GroupLayout(jf_clientes.getContentPane());
+        jf_clientes.getContentPane().setLayout(jf_clientesLayout);
+        jf_clientesLayout.setHorizontalGroup(
+            jf_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jf_clientesLayout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addGroup(jf_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15)
+                    .addGroup(jf_clientesLayout.createSequentialGroup()
+                        .addComponent(tf_search_id, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53)
+                        .addComponent(jb_searchID))
+                    .addGroup(jf_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jf_clientesLayout.createSequentialGroup()
+                            .addComponent(jb_delete)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jb_exit_clients))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(108, Short.MAX_VALUE))
+        );
+        jf_clientesLayout.setVerticalGroup(
+            jf_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jf_clientesLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jf_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tf_search_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jb_searchID))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jf_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jf_clientesLayout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jb_delete)
+                        .addContainerGap(49, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jf_clientesLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jb_exit_clients)
+                        .addGap(36, 36, 36))))
+        );
+
+        javax.swing.GroupLayout jf_InventarioLayout = new javax.swing.GroupLayout(jf_Inventario.getContentPane());
+        jf_Inventario.getContentPane().setLayout(jf_InventarioLayout);
+        jf_InventarioLayout.setHorizontalGroup(
+            jf_InventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jf_InventarioLayout.setVerticalGroup(
+            jf_InventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jf_compras_clienteLayout = new javax.swing.GroupLayout(jf_compras_cliente.getContentPane());
+        jf_compras_cliente.getContentPane().setLayout(jf_compras_clienteLayout);
+        jf_compras_clienteLayout.setHorizontalGroup(
+            jf_compras_clienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jf_compras_clienteLayout.setVerticalGroup(
+            jf_compras_clienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jb_login.setText("Log in");
+        jb_login.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_loginMouseClicked(evt);
+            }
+        });
 
         jLabel1.setText("Username");
 
@@ -505,6 +662,111 @@ public class Menu extends javax.swing.JFrame {
         rb_noEmail.setSelected(false);
     }//GEN-LAST:event_rb_withEmailMouseClicked
 
+    private void jb_loginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_loginMouseClicked
+        // TODO add your handling code here:
+        String username="";
+        String password="";
+        username=jTF_user.getText();
+        password=pf_password_user.getText();
+        System.out.println(username);
+        System.out.println(password);
+        if(username.equals("Test") || password=="12345"){
+            JOptionPane.showMessageDialog(this, "Logging in");
+            jd_Administer.setModal(true);
+            jd_Administer.pack();
+            jd_Administer.setLocationRelativeTo(this);
+            jd_Administer.setVisible(true);
+            jTF_user.setText("");
+            pf_password_user.setText("");
+        }else if(username!="admin"){
+            System.out.println("Something");
+        }
+    }//GEN-LAST:event_jb_loginMouseClicked
+
+    private void jb_searchIDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_searchIDMouseClicked
+        // TODO add your handling code here:
+        
+        try{
+            String locator = "";
+            locator = tf_search_id.getText();
+            int convertedLocator = Integer.parseInt(locator);
+            String sql2 = "";
+            sql2 = "SELECT ID_CLIENTE FROM CLIENTES WHERE ID_CLIENTE=" + convertedLocator;
+            st = cn.createStatement();
+            rs = st.executeQuery(sql2);
+            int value = 0;
+            while (rs.next()) {
+                value = rs.getInt(1);
+            }
+            System.out.println(value);
+            if(value==convertedLocator){
+                String nameUser="";
+                String sqlname = "SELECT * FROM CLIENTES WHERE ID_CLIENTE=" + convertedLocator;
+                Statement st2 = cn.createStatement();
+                ResultSet rs2 = st2.executeQuery(sqlname);
+                while(rs2.next()){
+                    nameUser+= rs2.getString(2);
+                }
+                String sqlLastName = "SELECT * FROM CLIENTES WHERE ID_CLIENTE=" + convertedLocator;
+                Statement st3 = cn.createStatement();
+                ResultSet rs3 = st3.executeQuery(sqlLastName);
+                nameUser+=" ";
+                while(rs3.next()){
+                    nameUser+= rs3.getString(4);
+                }
+                DefaultTableModel model = (DefaultTableModel) Table_Clients.getModel();
+                model.addRow(new Object[]{convertedLocator,nameUser});
+            }else{
+                JOptionPane.showMessageDialog(jf_clientes, "User not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jb_searchIDMouseClicked
+
+    private void jb_clientes_adminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_clientes_adminMouseClicked
+        // TODO add your handling code here:
+        jd_Administer.dispose();
+        jf_clientes.setModalExclusionType(Dialog.ModalExclusionType.NO_EXCLUDE);
+        jf_clientes.pack();
+        jf_clientes.setLocationRelativeTo(this);
+        jf_clientes.setVisible(true);
+        
+    }//GEN-LAST:event_jb_clientes_adminMouseClicked
+
+    private void jb_deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_deleteMouseClicked
+        // TODO add your handling code here:
+        try {
+            int xValue = Table_Clients.getSelectedRow();
+            String codex = Table_Clients.getValueAt(xValue, 0).toString();
+            System.out.println(codex);
+            String sql2 = "DELETE FROM CLIENTES WHERE ID_CLIENTE=" + codex;
+            st = cn.createStatement();
+            rs = st.executeQuery(sql2);
+        } catch (Exception e) {
+
+        }
+    }//GEN-LAST:event_jb_deleteMouseClicked
+
+    private void jb_exit_clientsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_exit_clientsMouseClicked
+        // TODO add your handling code here:
+        if(Table_Clients.getRowCount()<1){
+            jf_clientes.dispose();
+            jd_Administer.setModal(true);
+            jd_Administer.pack();
+            jd_Administer.setLocationRelativeTo(this);
+            jd_Administer.setVisible(true);
+        }else{
+            DefaultTableModel model = (DefaultTableModel) Table_Clients.getModel();
+            model.setRowCount(0);
+            jf_clientes.dispose();
+            jd_Administer.setModal(true);
+            jd_Administer.pack();
+            jd_Administer.setLocationRelativeTo(this);
+            jd_Administer.setVisible(true);
+        }
+    }//GEN-LAST:event_jb_exit_clientsMouseClicked
+
     public static boolean isValid(String email) 
     { 
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
@@ -564,11 +826,14 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Table_Clients;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -577,13 +842,24 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTF_user;
+    private javax.swing.JButton jb_InventarioTienda;
     private javax.swing.JButton jb_acceptRecord;
+    private javax.swing.JButton jb_clientes_admin;
+    private javax.swing.JButton jb_comprasxclient;
+    private javax.swing.JButton jb_delete;
+    private javax.swing.JButton jb_exit;
+    private javax.swing.JButton jb_exit_clients;
     private javax.swing.JButton jb_login;
     private javax.swing.JButton jb_register;
+    private javax.swing.JButton jb_searchID;
     private javax.swing.JDialog jd_Administer;
     private javax.swing.JDialog jd_crearUserOnline;
     private javax.swing.JDialog jd_registradora;
+    private javax.swing.JFrame jf_Inventario;
+    private javax.swing.JFrame jf_clientes;
+    private javax.swing.JFrame jf_compras_cliente;
     private javax.swing.JFrame jf_onlineShop;
     private javax.swing.JPasswordField pf_confirmPass;
     private javax.swing.JPasswordField pf_passClient;
@@ -596,6 +872,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JTextField tf_idClient;
     private javax.swing.JTextField tf_lastName;
     private javax.swing.JTextField tf_middleNameClient;
+    private javax.swing.JTextField tf_search_id;
     private javax.swing.JTextField tf_secondLastNameClient;
     // End of variables declaration//GEN-END:variables
 }
