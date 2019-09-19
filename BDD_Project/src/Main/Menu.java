@@ -113,6 +113,12 @@ public class Menu extends javax.swing.JFrame {
         rb_noEmail = new javax.swing.JRadioButton();
         rb_withEmail = new javax.swing.JRadioButton();
         jd_registradora = new javax.swing.JDialog();
+        jLabel20 = new javax.swing.JLabel();
+        tf_clientSearch_Store = new javax.swing.JTextField();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        Table_Store_Client_Trans = new javax.swing.JTable();
+        jb_Exit_Store_Client_Locator = new javax.swing.JButton();
+        jb_searchStorePerClient = new javax.swing.JButton();
         jd_Administer = new javax.swing.JDialog();
         jLabel14 = new javax.swing.JLabel();
         jb_clientes_admin = new javax.swing.JButton();
@@ -306,15 +312,60 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jLabel20.setText("Client");
+
+        Table_Store_Client_Trans.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Tienda", "Address"
+            }
+        ));
+        jScrollPane4.setViewportView(Table_Store_Client_Trans);
+
+        jb_Exit_Store_Client_Locator.setText("Exit");
+
+        jb_searchStorePerClient.setText("Search");
+        jb_searchStorePerClient.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_searchStorePerClientMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jd_registradoraLayout = new javax.swing.GroupLayout(jd_registradora.getContentPane());
         jd_registradora.getContentPane().setLayout(jd_registradoraLayout);
         jd_registradoraLayout.setHorizontalGroup(
             jd_registradoraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jd_registradoraLayout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(jd_registradoraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jd_registradoraLayout.createSequentialGroup()
+                        .addComponent(tf_clientSearch_Store, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addComponent(jb_searchStorePerClient))
+                    .addComponent(jLabel20))
+                .addContainerGap(38, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_registradoraLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jb_Exit_Store_Client_Locator)
+                .addGap(140, 140, 140))
         );
         jd_registradoraLayout.setVerticalGroup(
             jd_registradoraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jd_registradoraLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel20)
+                .addGap(18, 18, 18)
+                .addGroup(jd_registradoraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tf_clientSearch_Store, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jb_searchStorePerClient))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jb_Exit_Store_Client_Locator)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jLabel14.setText("Admin");
@@ -1139,6 +1190,54 @@ public class Menu extends javax.swing.JFrame {
         jd_Administer.setVisible(true);
     }//GEN-LAST:event_jb_exit_clientProductsMouseClicked
 
+    private void jb_searchStorePerClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_searchStorePerClientMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel modelS = (DefaultTableModel) Table_Store_Client_Trans.getModel();
+        modelS.setRowCount(0);
+        try{
+            String compareID = tf_clientSearch_Store.getText();
+            String sql2 = "";
+            sql2 = "SELECT ID_CLIENTE FROM CLIENTES WHERE ID_CLIENTE=" + compareID;
+            st = cn.createStatement();
+            rs = st.executeQuery(sql2);
+            int valueExtracted=0;
+            while(rs.next()){
+                valueExtracted=rs.getInt(1);
+            }
+            if (valueExtracted==Integer.parseInt(compareID)) {
+                String sqlStores = "SELECT * FROM clientextienda WHERE id_cliente_clientextienda="+valueExtracted;
+                Statement stStore = cn.createStatement();
+                ResultSet rs2 = stStore.executeQuery(sqlStores);
+                ArrayList<String> data = new ArrayList<String>();
+                while(rs2.next()){
+                    data.add(Integer.toString(rs2.getInt(2)));
+                }
+                ArrayList<String> locations = new ArrayList<String>();
+                
+                for (int i = 0; i < data.size(); i++) {
+                    String sqlLocations = "SELECT * FROM TIENDAS WHERE id_tienda="+locations.get(i);
+                    Statement stLocations = cn.createStatement();
+                    ResultSet rs3 = stLocations.executeQuery(sqlLocations);
+                    while(rs3.next()){
+                        locations.add(rs3.getString(3));
+                    }
+                }
+                
+                DefaultTableModel model = (DefaultTableModel) Table_Store_Client_Trans.getModel();
+                
+                for (int i = 0; i < data.size(); i++) {
+                    model.addRow(new Object[]{data.get(i), locations.get(i)});
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(jd_registradora, "User not found");
+            }
+        }catch(Exception e){
+            
+        }
+        
+    }//GEN-LAST:event_jb_searchStorePerClientMouseClicked
+
     public static boolean isValid(String email) 
     { 
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
@@ -1201,6 +1300,7 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Table_Clients;
     private javax.swing.JTable Table_Inventory_store;
+    private javax.swing.JTable Table_Store_Client_Trans;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1213,6 +1313,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1223,7 +1324,9 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField jTF_user;
+    private javax.swing.JButton jb_Exit_Store_Client_Locator;
     private javax.swing.JButton jb_InventarioTienda;
     private javax.swing.JButton jb_acceptRecord;
     private javax.swing.JButton jb_canasta;
@@ -1239,6 +1342,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton jb_searchClientProducts;
     private javax.swing.JButton jb_searchID;
     private javax.swing.JButton jb_searchID_store;
+    private javax.swing.JButton jb_searchStorePerClient;
     private javax.swing.JDialog jd_Administer;
     private javax.swing.JDialog jd_crearUserOnline;
     private javax.swing.JDialog jd_registradora;
@@ -1254,6 +1358,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JTable table_productsPerClient;
     private javax.swing.JTextField tf_addressClient;
     private javax.swing.JTextField tf_clientID_searchProducts;
+    private javax.swing.JTextField tf_clientSearch_Store;
     private javax.swing.JTextField tf_emailClient;
     private javax.swing.JTextField tf_firstNameClient;
     private javax.swing.JTextField tf_idClient;
