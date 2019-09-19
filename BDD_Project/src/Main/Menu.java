@@ -119,6 +119,7 @@ public class Menu extends javax.swing.JFrame {
         jb_InventarioTienda = new javax.swing.JButton();
         jb_comprasxclient = new javax.swing.JButton();
         jb_exit = new javax.swing.JButton();
+        jb_canasta = new javax.swing.JButton();
         jf_onlineShop = new javax.swing.JFrame();
         jf_clientes = new javax.swing.JFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -135,7 +136,16 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         Table_Inventory_store = new javax.swing.JTable();
         jb_confirmExit_Inventory = new javax.swing.JButton();
-        jf_compras_cliente = new javax.swing.JFrame();
+        jf_compras_canasta = new javax.swing.JFrame();
+        jLabel17 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        table_productsPerClient = new javax.swing.JTable();
+        jLabel18 = new javax.swing.JLabel();
+        tf_clientID_searchProducts = new javax.swing.JTextField();
+        jb_searchClientProducts = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
+        tf_idFactura = new javax.swing.JTextField();
+        jb_exit_clientProducts = new javax.swing.JButton();
         jTF_user = new javax.swing.JTextField();
         pf_password_user = new javax.swing.JPasswordField();
         jb_login = new javax.swing.JButton();
@@ -326,6 +336,18 @@ public class Menu extends javax.swing.JFrame {
         jb_comprasxclient.setText("Transacciones Realizadas");
 
         jb_exit.setText("Salir");
+        jb_exit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_exitMouseClicked(evt);
+            }
+        });
+
+        jb_canasta.setText("Canasta");
+        jb_canasta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_canastaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jd_AdministerLayout = new javax.swing.GroupLayout(jd_Administer.getContentPane());
         jd_Administer.getContentPane().setLayout(jd_AdministerLayout);
@@ -334,18 +356,19 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(jd_AdministerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jd_AdministerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jd_AdministerLayout.createSequentialGroup()
-                        .addComponent(jb_clientes_admin)
-                        .addGap(32, 32, 32)
-                        .addComponent(jb_InventarioTienda))
-                    .addComponent(jLabel14))
-                .addGap(42, 42, 42)
-                .addComponent(jb_comprasxclient)
-                .addContainerGap(138, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_AdministerLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jb_exit)
-                .addGap(25, 25, 25))
+                    .addComponent(jb_exit)
+                    .addGroup(jd_AdministerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jd_AdministerLayout.createSequentialGroup()
+                            .addGroup(jd_AdministerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jd_AdministerLayout.createSequentialGroup()
+                                    .addComponent(jb_clientes_admin)
+                                    .addGap(32, 32, 32)
+                                    .addComponent(jb_InventarioTienda))
+                                .addComponent(jLabel14))
+                            .addGap(18, 18, 18)
+                            .addComponent(jb_comprasxclient))
+                        .addComponent(jb_canasta)))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         jd_AdministerLayout.setVerticalGroup(
             jd_AdministerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,9 +380,11 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(jb_clientes_admin)
                     .addComponent(jb_InventarioTienda)
                     .addComponent(jb_comprasxclient))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
+                .addGap(47, 47, 47)
+                .addComponent(jb_canasta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
                 .addComponent(jb_exit)
-                .addContainerGap())
+                .addGap(19, 19, 19))
         );
 
         javax.swing.GroupLayout jf_onlineShopLayout = new javax.swing.GroupLayout(jf_onlineShop.getContentPane());
@@ -510,15 +535,85 @@ public class Menu extends javax.swing.JFrame {
                 .addGap(28, 28, 28))
         );
 
-        javax.swing.GroupLayout jf_compras_clienteLayout = new javax.swing.GroupLayout(jf_compras_cliente.getContentPane());
-        jf_compras_cliente.getContentPane().setLayout(jf_compras_clienteLayout);
-        jf_compras_clienteLayout.setHorizontalGroup(
-            jf_compras_clienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        jLabel17.setText("Canasta por producto");
+
+        table_productsPerClient.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Cantidad", "Precio", "Costo"
+            }
+        ));
+        jScrollPane3.setViewportView(table_productsPerClient);
+
+        jLabel18.setText("Cliente");
+
+        jb_searchClientProducts.setText("Search");
+        jb_searchClientProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_searchClientProductsMouseClicked(evt);
+            }
+        });
+
+        jLabel19.setText("ID Factura");
+
+        tf_idFactura.setEditable(false);
+
+        jb_exit_clientProducts.setText("Exit");
+        jb_exit_clientProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_exit_clientProductsMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jf_compras_canastaLayout = new javax.swing.GroupLayout(jf_compras_canasta.getContentPane());
+        jf_compras_canasta.getContentPane().setLayout(jf_compras_canastaLayout);
+        jf_compras_canastaLayout.setHorizontalGroup(
+            jf_compras_canastaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jf_compras_canastaLayout.createSequentialGroup()
+                .addGroup(jf_compras_canastaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jb_exit_clientProducts)
+                    .addGroup(jf_compras_canastaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jf_compras_canastaLayout.createSequentialGroup()
+                            .addGap(32, 32, 32)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jf_compras_canastaLayout.createSequentialGroup()
+                            .addGap(41, 41, 41)
+                            .addGroup(jf_compras_canastaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel17)
+                                .addGroup(jf_compras_canastaLayout.createSequentialGroup()
+                                    .addComponent(jLabel18)
+                                    .addGap(29, 29, 29)
+                                    .addComponent(tf_clientID_searchProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(36, 36, 36)
+                                    .addComponent(jb_searchClientProducts)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jf_compras_canastaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jf_compras_canastaLayout.createSequentialGroup()
+                                    .addComponent(jLabel19)
+                                    .addGap(75, 75, 75))
+                                .addComponent(tf_idFactura)))))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
-        jf_compras_clienteLayout.setVerticalGroup(
-            jf_compras_clienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        jf_compras_canastaLayout.setVerticalGroup(
+            jf_compras_canastaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jf_compras_canastaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jf_compras_canastaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(jLabel19))
+                .addGap(6, 6, 6)
+                .addGroup(jf_compras_canastaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(tf_clientID_searchProducts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jb_searchClientProducts)
+                    .addComponent(tf_idFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(jb_exit_clientProducts)
+                .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -946,6 +1041,104 @@ public class Menu extends javax.swing.JFrame {
         jd_Administer.setVisible(true);
     }//GEN-LAST:event_jb_confirmExit_InventoryMouseClicked
 
+    private void jb_exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_exitMouseClicked
+        // TODO add your handling code here:
+        jd_Administer.dispose();
+        
+    }//GEN-LAST:event_jb_exitMouseClicked
+
+    private void jb_canastaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_canastaActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) table_productsPerClient.getModel();
+        model.setRowCount(0);
+        jd_Administer.dispose();
+        jf_compras_canasta.setModalExclusionType(Dialog.ModalExclusionType.NO_EXCLUDE);
+        jf_compras_canasta.pack();
+        jf_compras_canasta.setLocationRelativeTo(this);
+        jf_compras_canasta.setVisible(true);
+    }//GEN-LAST:event_jb_canastaActionPerformed
+
+    private void jb_searchClientProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_searchClientProductsMouseClicked
+        // TODO add your handling code here:
+        try {
+            String locator = "";
+            locator = tf_clientID_searchProducts.getText();
+            int convertedLocator = Integer.parseInt(locator);
+            String sql2 = "";
+            sql2 = "SELECT ID_CLIENTE FROM CLIENTES WHERE ID_CLIENTE=" + convertedLocator;
+            st = cn.createStatement();
+            rs = st.executeQuery(sql2);
+            int value = 0;
+            while (rs.next()) {
+                value = rs.getInt(1);
+            }
+            if(value==convertedLocator){
+                String sqlGetAllItems="";
+                sqlGetAllItems="SELECT id_cliente_PC FROM productoxcliente WHERE id_cliente_PC ="+value;
+                Statement st2 = cn.createStatement();
+                ResultSet rs2 = st2.executeQuery(sqlGetAllItems);
+                
+                int idValue=0;
+                while(rs2.next()){
+                    idValue= rs2.getInt(1);
+                }
+                if(idValue==value){
+                    ArrayList<String> productIDs = new ArrayList<String>();
+                    ArrayList <String> productNames = new ArrayList<String>();
+                    ArrayList<String> quantities = new ArrayList<String>();
+                    ArrayList<String> cost= new ArrayList<String>();
+                    ArrayList<String> price = new ArrayList<String>();
+                    String sqlGetter = "SELECT * FROM productoxcliente WHERE id_cliente_PC ="+value;
+                    Statement st3 = cn.createStatement();
+                    ResultSet rs3 = st3.executeQuery(sqlGetter);
+                    String idFactura="";
+                    while(rs3.next()){
+                            idFactura = Integer.toString(rs3.getInt(3));
+                            productIDs.add(Integer.toString(rs3.getInt(2)));
+                            quantities.add(rs3.getString(4));
+                    }
+                    
+                    
+                    for (int i = 0; i < productIDs.size(); i++) {
+                        String productExtractor="";
+                        productExtractor = "SELECT * FROM PRODUCTOS WHERE codigo_producto ="+productIDs.get(i);
+                        Statement st4 = cn.createStatement();
+                        ResultSet rst1 = st4.executeQuery(productExtractor);
+                        while(rst1.next()){
+                            productNames.add(rst1.getString(1));
+                            price.add(Integer.toString(rst1.getInt(5)));
+                            cost.add(Integer.toString(
+                                    Integer.parseInt(quantities.get(i))*rst1.getInt(5)));
+                        }
+                    }
+                    tf_idFactura.setText(idFactura);
+                    for (int i = 0; i < productIDs.size(); i++) {
+                        DefaultTableModel model = (DefaultTableModel) table_productsPerClient.getModel();
+                        model.addRow(new Object[]{productNames.get(i),quantities.get(i), price.get(i),
+                                                cost.get(i)});
+                    }
+                    
+                }else{
+                    JOptionPane.showMessageDialog(jf_compras_canasta, "This client has no cart");
+                }
+            }else{
+                JOptionPane.showMessageDialog(jf_compras_canasta, "No se encontro el cliente");
+            }
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jb_searchClientProductsMouseClicked
+
+    private void jb_exit_clientProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_exit_clientProductsMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) table_productsPerClient.getModel();
+        model.setRowCount(0);
+        jf_compras_canasta.dispose();
+        jd_Administer.setModal(true);
+        jd_Administer.pack();
+        jd_Administer.setLocationRelativeTo(this);
+        jd_Administer.setVisible(true);
+    }//GEN-LAST:event_jb_exit_clientProductsMouseClicked
+
     public static boolean isValid(String email) 
     { 
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
@@ -1016,6 +1209,9 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1026,17 +1222,21 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField jTF_user;
     private javax.swing.JButton jb_InventarioTienda;
     private javax.swing.JButton jb_acceptRecord;
+    private javax.swing.JButton jb_canasta;
     private javax.swing.JButton jb_clientes_admin;
     private javax.swing.JButton jb_comprasxclient;
     private javax.swing.JButton jb_confirmExit_Inventory;
     private javax.swing.JButton jb_delete;
     private javax.swing.JButton jb_exit;
+    private javax.swing.JButton jb_exit_clientProducts;
     private javax.swing.JButton jb_exit_clients;
     private javax.swing.JButton jb_login;
     private javax.swing.JButton jb_register;
+    private javax.swing.JButton jb_searchClientProducts;
     private javax.swing.JButton jb_searchID;
     private javax.swing.JButton jb_searchID_store;
     private javax.swing.JDialog jd_Administer;
@@ -1044,21 +1244,52 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JDialog jd_registradora;
     private javax.swing.JFrame jf_Inventario;
     private javax.swing.JFrame jf_clientes;
-    private javax.swing.JFrame jf_compras_cliente;
+    private javax.swing.JFrame jf_compras_canasta;
     private javax.swing.JFrame jf_onlineShop;
     private javax.swing.JPasswordField pf_confirmPass;
     private javax.swing.JPasswordField pf_passClient;
     private javax.swing.JPasswordField pf_password_user;
     private javax.swing.JRadioButton rb_noEmail;
     private javax.swing.JRadioButton rb_withEmail;
+    private javax.swing.JTable table_productsPerClient;
     private javax.swing.JTextField tf_addressClient;
+    private javax.swing.JTextField tf_clientID_searchProducts;
     private javax.swing.JTextField tf_emailClient;
     private javax.swing.JTextField tf_firstNameClient;
     private javax.swing.JTextField tf_idClient;
+    private javax.swing.JTextField tf_idFactura;
     private javax.swing.JTextField tf_lastName;
     private javax.swing.JTextField tf_middleNameClient;
     private javax.swing.JTextField tf_search_id;
     private javax.swing.JTextField tf_secondLastNameClient;
     private javax.swing.JTextField tf_tiendaID;
     // End of variables declaration//GEN-END:variables
+
+    //Views
+    
+    /*
+    
+    View #2
+    CREATE VIEW canasta_purchases
+    AS Select nombre_producto, cantidad_productoxcliente, precio_producto, cantidad_productoxcliente*precio_producto as preciocanasta
+    FROM Producto, productoxcliente
+    WHERE codigo_producto_productoxcliente = codigo_producto
+    GROUP BY id_Canasta
+
+    View #3
+    CREATE VIEW client_purchases
+    AS SELECT nombre_producto, id_canasta_productoxcliente, cantidad_productoxcliente, cantidad_productoxcliente*precio_producto as preciocanasta
+
+    FROM cliente, producto, productoxcliente
+    WHERE id_Cliente = idCliente_productoxcliente AND codigo_producto = codigo_producto_productoxcliente
+    GROUP BY Id_cliente, PN, PA
+    
+    View #4
+    Create view sells
+    AS Select id_Cliente, PN, PA
+    FROM clientextienda, cliente
+    WHERE id_cliente = id_cliente_clientextienda
+    GROUP BY id_tienda_clientextienda
+    */
+
 }
